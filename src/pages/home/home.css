@@ -1,0 +1,105 @@
+:root {
+    --u: 200px;
+}
+
+.qr_box {
+    width: 100%;
+    height: 100%;
+    padding: 3% 5%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5vw;
+}
+
+.qr_box>h1 {
+    inline-size: 100%;
+    text-align: center;
+    font-size: 2.5rem;
+    color: #eee;
+}
+
+.qr_item {
+    position: relative;
+    width: calc(100% / 2 - 2.5vw);
+    aspect-ratio: 1/1;
+    padding: 3%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background: url(../../assets/img/masa.jpg);
+    background-size: cover;
+    border-radius: 10px;
+    overflow: hidden;
+    font-size: 1.4rem;
+    color: #333;
+    gap: 5vw;
+    z-index: 1;
+}
+
+.qr_item::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    content: '';
+    backdrop-filter: blur(2px);
+    z-index: -1;
+}
+
+.busy_table {
+    color: #70e000;
+}
+
+.busy_table::after {
+    background: #00000090;
+    backdrop-filter: blur(0px);
+}
+
+.qr_item>i {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.qr_on {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: #333;
+    color: #fff;
+    z-index: 999;
+}
+
+
+.qr_on>img {
+    width: 85vw;
+    aspect-ratio: 4/4;
+    object-fit: cover;
+}
+
+.qr_on>p {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 3% 5%;
+    gap: 2vw;
+    font-size: 3rem;
+}
+
+.qr_on>p>span {
+    font-size: 1.5rem;
+}
+
+.qr_on>h3 {
+    color: #eee;
+}
