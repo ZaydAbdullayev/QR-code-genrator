@@ -72,7 +72,10 @@ export const Home = memo(() => {
 
   return (
     <div className="qr_box">
-      <h1>LAGMAN HOUSE</h1>
+      <h1>
+        LAGMAN <br />
+        HOUSE
+      </h1>
       {data?.data?.map((item) => (
         <div className="qr_item_box" key={item?.name}>
           <div className="action_box">
