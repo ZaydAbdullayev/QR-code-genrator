@@ -45,12 +45,12 @@
     display: flex;
     align-items: center;
     padding: 0 5px;
-    gap: 10vw;
+    gap: 9vw;
 }
 
 .action {
     position: relative;
-    width: calc(100% - 20px - 10vw);
+    width: calc(100% - 20px - 9vw);
     height: calc(25px + (35 - 25)*(100vw - 320px)/(920 - 320));
     border-radius: 50px;
     overflow: hidden;
