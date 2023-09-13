@@ -1,12 +1,26 @@
 import React, { useState, memo } from "react";
 import "./home.css";
 import QRCode from "qrcode";
+import {
+  useAddTableMutation,
+  useGetTablesQuery,
+  useUpdateTableByIdMutation,
+  useDeleteTableByIdMutation,
+} from "../../service/table.service";
 
 export const Home = memo(() => {
   const [qrCodeDataUrl, setQRCodeDataUrl] = useState({});
+  const [addQRCode, setAddQRCode] = useState(false);
+  const [url, setUrl] = useState("");
+  const { data = [] } = useGetTablesQuery();
+  const [addTable] = useAddTableMutation();
+  const [updateTableById] = useUpdateTableByIdMutation();
+  const [deleteTableById] = useDeleteTableByIdMutation();
 
   const generateQRCode = async (url, id) => {
-    const qrUrl = url.split("?lp").join(`?lp${id}`);
+    const key = Math.floor(Math.random() * 10000 + 1);
+    const createURl = url.split("?lp").join(`?lp${key}`).split("&");
+    const qrUrl = `${createURl[0]}&${createURl[1]}&${key}`;
     console.log(qrUrl);
     if (url) {
       try {
@@ -17,7 +31,7 @@ export const Home = memo(() => {
           [id]: dataUrl,
         }));
       } catch (error) {
-        console.error("QR kodu oluşturma hatası:", error);
+        console.error("QR kodu oluşturma hatasi:", error);
       }
     }
   };
@@ -29,86 +43,107 @@ export const Home = memo(() => {
     }));
   };
 
+  const addQRCodeItem = async (e) => {
+    e.preventDefault();
+    const { name, url } = e.target;
+    const qrdata = {
+      name: name.value,
+      url: url.value,
+    };
+    const { data } = await addTable(qrdata);
+    if (!data) return alert("Xatolik yuz berdi");
+    setAddQRCode(false);
+  };
+
+  const createUrl = (value) => {
+    const url = value.toLowerCase().split(" ").join("");
+    setUrl(`https://foodify.uz/?lp=${url}&1234`);
+  };
+
+  const updateTable = async (tData) => {
+    const { data } = await updateTableById(tData);
+    if (!data) return alert("Xatolik yuz berdi");
+  };
+
+  const deleteTable = async (name) => {
+    const { data } = await deleteTableById(name);
+    if (!data) return alert("Xatolik yuz berdi");
+  };
+
   return (
     <div className="qr_box">
-      <h1>QR kodlar</h1>
-      {qrData.map((item) => (
-        <div
-          className={
-            qrCodeDataUrl[item.id] && !item.active
-              ? "qr_item qr_on"
-              : item.active
-              ? "qr_item busy_table"
-              : "qr_item"
-          }
-          key={item.id}
-        >
-          {qrCodeDataUrl[item.id] && (
-            <p onClick={() => goback(item.id)}>
-              {item.active ? (
-                "Stoll band"
-              ) : (
-                <>
-                  ◄ <span>orqaga</span>
-                </>
-              )}
-            </p>
-          )}
-          <h3>
-            {item.id} - {item.name}
-          </h3>
-          {!qrCodeDataUrl[item.id] && (
-            <i onClick={() => generateQRCode(item.url, item.id)}></i>
-          )}
-          {qrCodeDataUrl[item.id] && !item.active && (
-            <img src={qrCodeDataUrl[item.id]} alt="QR Kodu" />
-          )}
+      <h1>LAGMAN HOUSE</h1>
+      {data?.data?.map((item) => (
+        <div className="qr_item_box" key={item?.name}>
+          <div className="action_box">
+            <div className="action">
+              <span
+                className={item.status === 0 ? "action1 active" : "action1"}
+              >
+                Bo'sh
+              </span>
+              <span
+                className={item.status === 1 ? "action2 active" : "action2"}
+                onClick={() => updateTable({ name: item?.name, status: 0 })}
+              >
+                Band
+              </span>
+            </div>
+            <button className="delete" onClick={() => deleteTable(item?.name)}>
+              X
+            </button>
+          </div>
+          <div
+            className={
+              qrCodeDataUrl[item?.name] && item.status === 0
+                ? "qr_item qr_on"
+                : item.status === 1
+                ? "qr_item busy_table"
+                : "qr_item"
+            }
+          >
+            {qrCodeDataUrl[item?.name] && (
+              <p onClick={() => goback(item?.name)}>
+                {item.status === 1 ? (
+                  "Stoll band"
+                ) : (
+                  <>
+                    ◄ <span>orqaga</span>
+                  </>
+                )}
+              </p>
+            )}
+            <h3 style={{ textTransform: "capitalize" }}>{item.name}</h3>
+            {!qrCodeDataUrl[item?.name] && (
+              <i onClick={() => generateQRCode(item.url, item?.name)}></i>
+            )}
+            {qrCodeDataUrl[item?.name] && item.status === 0 && (
+              <img src={qrCodeDataUrl[item?.name]} alt="QR Kodu" />
+            )}
+          </div>
         </div>
       ))}
+      <div className="qr_item_box">
+        <form className="add_qr qr_item" onSubmit={addQRCodeItem}>
+          {!addQRCode ? (
+            <span onClick={() => setAddQRCode(true)}>+</span>
+          ) : (
+            <>
+              <input
+                type="text"
+                required
+                name="name"
+                autoComplete="off"
+                placeholder="Stoll yoki xona nominiyozing"
+                onChange={(e) => createUrl(e.target.value)}
+                autoFocus
+              />
+              <input type="hidden" name="url" value={url} />
+              <button>Qo'shish</button>
+            </>
+          )}
+        </form>
+      </div>
     </div>
   );
 });
-
-const qrData = [
-  {
-    id: 1,
-    name: "Stoll",
-    url: "https://foodify.uz/?lp=stoll1&1234",
-  },
-  {
-    id: 2,
-    name: "Stoll",
-    url: "https://foodify.uz/?lp=stoll2&1234",
-  },
-  {
-    id: 3,
-    name: "Stoll",
-    url: "https://foodify.uz/?lp=stoll3&1234",
-    active: true,
-  },
-  {
-    id: 4,
-    name: "Stoll",
-    url: "https://foodify.uz/?lp=stoll4&1234",
-  },
-  {
-    id: 5,
-    name: "Stoll",
-    url: "https://foodify.uz/?lp=stoll5&1234",
-  },
-  {
-    id: 6,
-    name: "Stoll",
-    url: "https://foodify.uz/?lp=stoll6&1234",
-  },
-  {
-    id: 7,
-    name: "Stoll",
-    url: "https://foodify.uz/?lp=stoll7&1234",
-  },
-  {
-    id: 8,
-    name: "Stoll",
-    url: "https://foodify.uz/?lp=stoll8&1234",
-  },
-];
