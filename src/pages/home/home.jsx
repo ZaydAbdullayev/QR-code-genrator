@@ -18,11 +18,11 @@ export const Home = memo(() => {
   const [deleteTableById] = useDeleteTableByIdMutation();
 
   const generateQRCode = async (url, id) => {
-    const key = Math.floor(Math.random() * 10000 + 1);
+    const key = Math.floor(Math.random() * 100000 + 1);
     const createURl = url.split("?lp").join(`?lp${key}`).split("&");
     const qrUrl = `${createURl[0]}&${createURl[1]}&${key}`;
-    console.log(qrUrl);
     if (url) {
+      console.log(qrUrl);
       try {
         // QR kodu oluştur
         const dataUrl = await QRCode.toDataURL(qrUrl);
@@ -66,8 +66,11 @@ export const Home = memo(() => {
   };
 
   const deleteTable = async (name) => {
-    const { data } = await deleteTableById(name);
-    if (!data) return alert("Xatolik yuz berdi");
+    const prompt = window.confirm("Stoll o'chirilsinmi?");
+    if (prompt) {
+      const { data } = await deleteTableById(name);
+      if (!data) return alert("Xatolik yuz berdi");
+    }
   };
 
   return (
