@@ -175,18 +175,22 @@
 
 .qr_on>p {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
+    bottom: 10%;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    width: 17vw;
+    height: 17vw;
+    border-radius: 50%;
+    background: #fff;
+    color: #333;
     display: flex;
     align-items: center;
-    padding: 3% 5%;
-    gap: 2vw;
-    font-size: 3rem;
+    justify-content: center;
 }
 
 .qr_on>p>span {
-    font-size: 1.5rem;
+    font-size: 3rem;
+    font-weight: 700;
 }
 
 .qr_on>h3 {

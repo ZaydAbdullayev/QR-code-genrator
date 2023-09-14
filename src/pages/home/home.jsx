@@ -111,13 +111,7 @@ export const Home = memo(() => {
           >
             {qrCodeDataUrl[item?.name] && (
               <p onClick={() => goback(item?.name)}>
-                {item.status === 1 ? (
-                  "Stoll band"
-                ) : (
-                  <>
-                    ◄ <span>orqaga</span>
-                  </>
-                )}
+                {item.status === 1 ? "Stoll band" : <span>↶</span>}
               </p>
             )}
             <h3 style={{ textTransform: "capitalize" }}>{item.name}</h3>
