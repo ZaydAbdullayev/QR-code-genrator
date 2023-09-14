@@ -85,6 +85,7 @@ export const Home = memo(() => {
             <div className="action">
               <span
                 className={item.status === 0 ? "action1 active" : "action1"}
+                onClick={() => updateTable({ name: item?.name, status: 1 })}
               >
                 Bo'sh
               </span>
