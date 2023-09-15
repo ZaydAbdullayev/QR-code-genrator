@@ -112,19 +112,21 @@ export const Home = memo(() => {
             }
           >
             {qrCodeDataUrl[item?.name] && (
-              <p onClick={() => goback(item?.name)}>
-                {item.status === 1 ? (
-                  "Stoll band"
-                ) : (
-                  <span>
-                    <MdArrowBack />
-                  </span>
-                )}
+              <p style={item.status === 1 ? { display: "none" } : {}}>
+                <span onClick={() => goback(item?.name)}>
+                  <MdArrowBack />
+                </span>
               </p>
             )}
             <h3 style={{ textTransform: "capitalize" }}>{item.name}</h3>
             {!qrCodeDataUrl[item?.name] && (
-              <i onClick={() => generateQRCode(item.url, item?.name)}></i>
+              <i
+                onClick={
+                  item?.status === 0
+                    ? () => generateQRCode(item.url, item?.name)
+                    : null
+                }
+              ></i>
             )}
             {qrCodeDataUrl[item?.name] && item.status === 0 && (
               <img src={qrCodeDataUrl[item?.name]} alt="QR Kodu" />
