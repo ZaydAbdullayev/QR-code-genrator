@@ -7,6 +7,7 @@ import {
   useUpdateTableByIdMutation,
   useDeleteTableByIdMutation,
 } from "../../service/table.service";
+import { MdArrowBack } from "react-icons/md";
 
 export const Home = memo(() => {
   const [qrCodeDataUrl, setQRCodeDataUrl] = useState({});
@@ -56,7 +57,7 @@ export const Home = memo(() => {
   };
 
   const createUrl = (value) => {
-    const url = value.toLowerCase().split(" ").join("");
+    const url = value.toLowerCase().split(" ").join("_");
     setUrl(`https://foodify.uz/?lp=${url}&1234`);
   };
 
@@ -111,7 +112,13 @@ export const Home = memo(() => {
           >
             {qrCodeDataUrl[item?.name] && (
               <p onClick={() => goback(item?.name)}>
-                {item.status === 1 ? "Stoll band" : <span>↶</span>}
+                {item.status === 1 ? (
+                  "Stoll band"
+                ) : (
+                  <span>
+                    <MdArrowBack />
+                  </span>
+                )}
               </p>
             )}
             <h3 style={{ textTransform: "capitalize" }}>{item.name}</h3>

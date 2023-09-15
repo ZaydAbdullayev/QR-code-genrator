@@ -189,7 +189,8 @@
 }
 
 .qr_on>p>span {
-    font-size: 3rem;
+    padding-top: 0.5rem;
+    font-size: 2.5rem;
     font-weight: 700;
 }
 

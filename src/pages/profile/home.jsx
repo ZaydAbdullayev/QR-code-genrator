@@ -5,18 +5,14 @@ import "./profile.css";
 const Notification = ({ message, onRemove }) => {
   const handlers = useSwipeable({
     onSwiped: (eventData) => {
-      if (
-        eventData.dir === "Right" ||
-        eventData.dir === "Left" ||
-        eventData.dir === "Up"
-      ) {
+      if (eventData.dir === "Right" || eventData.dir === "Left") {
         onRemove();
       }
     },
   });
 
   return (
-    <div className="notification" {...handlers}>
+    <div className="notification" {...handlers} onClick={onRemove}>
       {message}
     </div>
   );
@@ -38,7 +34,7 @@ export const App = () => {
 
     setTimeout(() => {
       removeNotification(newNotification.id);
-    }, 10000); // Her bir bildirim için 5 saniye sonra otomatik olarak bildirimi kaldır
+    }, 10000);
   };
 
   const removeNotification = (id) => {
