@@ -12,7 +12,11 @@ const Notification = ({ message, onRemove }) => {
   });
 
   return (
-    <div className="notification" {...handlers} onClick={onRemove}>
+    <div
+      className="notification nothification_off"
+      {...handlers}
+      onClick={onRemove}
+    >
       {message}
     </div>
   );

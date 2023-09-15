@@ -17,6 +17,10 @@
     transition: all 0.5s ease-in-out;
 }
 
+.nothification_off {
+    transform: translateX(-100%);
+}
+
 
 @keyframes swipe {
     0% {
