@@ -9,6 +9,7 @@
     flex-wrap: wrap;
     align-items: center;
     background: #333;
+    border-bottom: 1px solid #ccc;
 }
 
 .qr_box> :nth-child(even) {
@@ -16,12 +17,9 @@
 }
 
 .qr_box>:last-child {
-    border: none;
+    border-bottom: none;
 }
 
-.qr_box>:nth-last-child(2) {
-    border-bottom: 0;
-}
 
 .qr_box>h1 {
     inline-size: 100%;
@@ -30,7 +28,7 @@
     padding: 3% 0;
     color: #eee;
     background: #333;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 2px solid #ccc;
 }
 
 .qr_item_box {
