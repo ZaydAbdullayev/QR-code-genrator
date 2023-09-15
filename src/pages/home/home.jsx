@@ -42,6 +42,7 @@ export const Home = memo(() => {
       ...prevDataUrl,
       [id]: null,
     }));
+    window.location.reload();
   };
 
   const addQRCodeItem = async (e) => {
