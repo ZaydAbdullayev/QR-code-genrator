@@ -1,4 +1,4 @@
-import React, { useState, memo } from "react";
+import React, { useState, memo, useRef } from "react";
 import "./home.css";
 import QRCode from "qrcode";
 import {
@@ -12,18 +12,23 @@ import { MdArrowBack } from "react-icons/md";
 export const Home = memo(() => {
   const [qrCodeDataUrl, setQRCodeDataUrl] = useState({});
   const [addQRCode, setAddQRCode] = useState(false);
+  const [copy, setCopy] = useState("");
   const [url, setUrl] = useState("");
   const { data = [] } = useGetTablesQuery();
   const [addTable] = useAddTableMutation();
   const [updateTableById] = useUpdateTableByIdMutation();
   const [deleteTableById] = useDeleteTableByIdMutation();
+  const [copySuccess, setCopySuccess] = useState(false);
+
+  const textRef = useRef(null);
+
+  textRef.current = copy;
 
   const generateQRCode = async (url, id) => {
     const key = Math.floor(Math.random() * 100000 + 1);
     const createURl = url.split("?lp").join(`?lp${key}`).split("&");
     const qrUrl = `${createURl[0]}&${createURl[1]}&${key}`;
     if (url) {
-      console.log(qrUrl);
       try {
         // QR kodu oluştur
         const dataUrl = await QRCode.toDataURL(qrUrl);
@@ -31,6 +36,7 @@ export const Home = memo(() => {
           ...prevDataUrl,
           [id]: dataUrl,
         }));
+        setCopy(qrUrl);
       } catch (error) {
         console.error("QR kodu oluşturma hatasi:", error);
       }
@@ -72,6 +78,19 @@ export const Home = memo(() => {
     if (prompt) {
       const { data } = await deleteTableById(name);
       if (!data) return alert("Xatolik yuz berdi");
+    }
+  };
+
+  const handleCopyClick = () => {
+    if (textRef.current) {
+      // Metni panoya kopyala
+      navigator.clipboard
+        .writeText(textRef.current)
+        .then(() => {
+          setCopySuccess(true);
+          setTimeout(() => setCopySuccess(false), 2000); // 2 saniye sonra başarılı mesajı gizle
+        })
+        .catch((err) => console.error("Kopyalashda xatolik:", err));
     }
   };
 
@@ -130,6 +149,12 @@ export const Home = memo(() => {
             )}
             {qrCodeDataUrl[item?.name] && item.status === 0 && (
               <img src={qrCodeDataUrl[item?.name]} alt="QR Kodu" />
+            )}
+
+            {qrCodeDataUrl[item?.name] && item.status === 0 && (
+              <span onClick={handleCopyClick}>
+                {copySuccess ? "Nusxalandi!" : "QR linkni nusxalash"}
+              </span>
             )}
           </div>
         </div>
